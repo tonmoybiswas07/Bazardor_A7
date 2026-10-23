@@ -35,7 +35,7 @@ const HeroBanner = () => {
           {/* CTA */}
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <Link
-              href="/products"
+              href="/AllProducts"
               className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-700 to-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-green-700/20 transition-all duration-300 hover:-translate-y-0.5 hover:from-green-800 hover:to-emerald-700 hover:shadow-xl active:scale-95 sm:px-6 sm:py-3.5"
             >
               সব পণ্যদাম দেখুন

@@ -35,7 +35,7 @@ const ProductByHighPrice = async () => {
     .slice(0, 6);
 
   return (
-    <section className=" px-4 py-10 sm:px-6 lg:px-8">
+    <section className="bg-gray-50  px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Section Heading */}
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
