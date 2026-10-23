@@ -59,7 +59,7 @@ const ProductByHighPrice = async () => {
           {filteredPriceUpData.map((product, index) => (
             <Link
               key={product.id}
-              href={`/newsdetails/${product.id}`}
+              href={`/ProductsDetails/${product.id}`}
               className="group relative overflow-hidden rounded-2xl border border-red-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-300 hover:shadow-lg"
             >
               {/* Rank */}

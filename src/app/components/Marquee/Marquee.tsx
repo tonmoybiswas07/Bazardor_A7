@@ -55,7 +55,7 @@ const Marquee = async () => {
 
               return (
                 <Link
-                  href={`/newsdetails/${product.id}`}
+                  href={`/ProductsDetails/${product.id}`}
                   key={product.id}
                   className="group mx-1 inline-flex h-14 items-center gap-2 border-r border-green-100 px-3 transition-colors duration-200 hover:bg-green-100 sm:gap-2.5 sm:px-5"
                 >

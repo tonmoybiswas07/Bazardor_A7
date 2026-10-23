@@ -62,7 +62,7 @@ const AllProductPage = async () => {
               return (
                 <Link
                   key={product.id}
-                  href={`/newsdetails/${product.id}`}
+                  href={`/ProductsDetails/${product.id}`}
                   className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-300 hover:shadow-lg"
                 >
                   {/* Icon and Category */}
