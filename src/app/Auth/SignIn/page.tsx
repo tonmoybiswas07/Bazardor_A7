@@ -35,13 +35,14 @@ export default function SignInPage() {
   };
 
   const googleSignIn = async () => {
-      const data = await authClient.signIn.social({
+      const data = await signIn.social({
         provider: "google",
       });
     };
     const gitHubSignIn=async()=>{
-     const data = await authClient.signIn.social({
-        provider: "github"
+     const data = await signIn.social({
+        provider: "github",
+         
     })
   }
 

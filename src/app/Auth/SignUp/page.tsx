@@ -9,7 +9,7 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 import { redirect } from "next/navigation";
-import { authClient, signUp } from "@/app/lib/auth-client";
+import { authClient, signIn, signUp } from "@/app/lib/auth-client";
 import { toast } from "react-toastify";
 
 export default function SignUpPage() {
@@ -65,12 +65,12 @@ export default function SignUpPage() {
   };
 
   const googleSignUp = async () => {
-    const data = await authClient.signIn.social({
+    const data = await signIn.social({
       provider: "google",
     });
   };
   const gitHubSignUp=async()=>{
-     const data = await authClient.signIn.social({
+     const data = await signIn.social({
         provider: "github"
     })
   }

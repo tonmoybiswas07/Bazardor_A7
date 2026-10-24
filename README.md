@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 বাজার দর (BazarDor)
 
-## Getting Started
+**BazarDor — Your Smart Daily Shopping Companion**
 
-First, run the development server:
+বাজার দর (BazarDor) is a modern web application designed to make everyday shopping easier and more convenient. It helps users explore products, check prices, and manage their shopping experience through a simple and user-friendly interface.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Technologies Used
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Next.js** — React framework for building the web application
+- **TypeScript** — Type-safe JavaScript development
+- **Tailwind CSS** — Utility-first styling for responsive UI
+- **MongoDB** — Database for storing application data
+- **Better Auth** — Authentication and account management
+- **Google OAuth** — Sign in with Google
+- **GitHub OAuth** — Sign in with GitHub
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **🛍️ Product Browsing** — Explore products through an intuitive shopping interface.
+2. **💰 Price Information** — View product prices to make informed shopping decisions.
+3. **🔐 Secure Authentication** — Sign up and sign in using email and password.
+4. **🌐 Social Login** — Authenticate conveniently using Google or GitHub.
+5. **📱 Responsive Design** — Enjoy a user-friendly experience across desktop, tablet, and mobile devices.
 
-## Learn More
+## ⚙️ Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Node.js
+- npm
+- MongoDB database
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Installation
 
-## Deploy on Vercel
+1. Clone the repository:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   git clone https://github.com/tonmoybiswas07/Bazardor_A7
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. Navigate to the project directory:
+
+   ```bash
+   cd bazardor
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Create a `.env.local` file in the project root and configure the required environment variables:
+
+   ```env
+   MONGODB_USER_SECRECT=your_mongodb_connection_string
+
+   BETTER_AUTH_URL=http://localhost:3000
+
+   GOOGLE_AUTH_CLIENT_ID=your_google_client_id
+   GOOGLE_AUTH_CLIENT_SECRECT=your_google_client_secret
+
+   GITHUB_CLIENT_ID=your_github_client_id
+   GITHUB_CLIENT_SECRECT=your_github_client_secret
+   ```
+
+5. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 🔒 Environment Variables
+
+Never commit `.env.local` or expose database credentials and OAuth client secrets publicly. Make sure `.env.local` is included in `.gitignore`.
+
+## 👨‍💻 Author
+
+Developed with ❤️ using Next.js and TypeScript.
+
+---
+
+**বাজার দর (BazarDor) — Making everyday shopping simpler!**
