@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { authClient, signIn } from "@/app/lib/auth-client";
+import {  signIn } from "@/app/lib/auth-client";
 import { toast } from "react-toastify";
 import { redirect } from "next/navigation";
 
@@ -38,10 +38,13 @@ export default function SignInPage() {
       const data = await signIn.social({
         provider: "google",
       });
+      
+
     };
     const gitHubSignIn=async()=>{
      const data = await signIn.social({
         provider: "github",
+        
          
     })
   }

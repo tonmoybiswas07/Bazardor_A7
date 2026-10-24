@@ -1,7 +1,7 @@
+"use client";
 
-
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
-export const instant = false;
 
 interface Product {
   id: number | string;
@@ -14,49 +14,123 @@ interface Product {
   };
 }
 
+type SortOption = "default" | "asc" | "desc";
+
 interface CategoryPageProps {
   params: Promise<{
     categoryId: string;
   }>;
 }
 
-const CategoryPage = async ({ params }: CategoryPageProps) => {
-  const { categoryId } = await params;
+const CategoryPage = ({ params }: CategoryPageProps) => {
+  const { categoryId } = use(params);
 
-  const resData = await fetch(
-    `https://api.abcz.workers.dev/api/bazardor/products?category=${categoryId}`,
-    {
-      next: { revalidate: 300 },
+  const [categoryProduct, setCategoryProduct] = useState<Product[]>([]);
+  const [sort, setSort] = useState<SortOption>("default");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  // Fetch products
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+
+        const resData = await fetch(
+          `https://api.abcz.workers.dev/api/bazardor/products?category=${encodeURIComponent(categoryId)}`,
+          { signal: controller.signal }
+        );
+
+        if (!resData.ok) {
+          throw new Error(
+            `Failed to fetch category products: ${resData.status}`
+          );
+        }
+
+        const data: unknown = await resData.json();
+
+        let products: Product[] = [];
+
+        if (Array.isArray(data)) {
+          products = data as Product[];
+        } else if (
+          typeof data === "object" &&
+          data !== null &&
+          "products" in data &&
+          Array.isArray(data.products)
+        ) {
+          products = data.products as Product[];
+        } else if (
+          typeof data === "object" &&
+          data !== null &&
+          "data" in data &&
+          Array.isArray(data.data)
+        ) {
+          products = data.data as Product[];
+        }
+
+        setCategoryProduct(products);
+      } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") {
+          return;
+        }
+
+        console.error(err);
+        setError(true);
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchProducts();
+
+    return () => {
+      controller.abort();
+    };
+  }, [categoryId]);
+
+  // Sort products by price
+  const sortedProducts = [...categoryProduct].sort((a, b) => {
+    if (sort === "asc") {
+      return Number(a.today) - Number(b.today);
     }
-  );
 
-  if (!resData.ok) {
-    throw new Error(
-      `Failed to fetch category products: ${resData.status}`
+    if (sort === "desc") {
+      return Number(b.today) - Number(a.today);
+    }
+
+    return 0;
+  });
+
+  if (loading) {
+    return (
+      <section className="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl text-center">
+          <span className="loading loading-spinner loading-lg text-green-600" />
+          <p className="mt-4 text-gray-600">পণ্য লোড হচ্ছে...</p>
+        </div>
+      </section>
     );
   }
 
-  const data: unknown = await resData.json();
-
-  
-  let categoryProduct: Product[] = [];
-
-  if (Array.isArray(data)) {
-    categoryProduct = data as Product[];
-  } else if (
-    typeof data === "object" &&
-    data !== null &&
-    "products" in data &&
-    Array.isArray(data.products)
-  ) {
-    categoryProduct = data.products as Product[];
-  } else if (
-    typeof data === "object" &&
-    data !== null &&
-    "data" in data &&
-    Array.isArray(data.data)
-  ) {
-    categoryProduct = data.data as Product[];
+  if (error) {
+    return (
+      <section className="min-h-screen bg-gray-50 px-4 py-10">
+        <div className="mx-auto max-w-7xl rounded-2xl bg-white p-10 text-center">
+          <h2 className="text-xl font-bold text-red-600">
+            পণ্য লোড করা যায়নি
+          </h2>
+          <p className="mt-2 text-gray-600">
+            অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।
+          </p>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -75,19 +149,44 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
           <p className="mt-2 text-gray-600">
             এই ক্যাটাগরির পণ্য ও বর্তমান দাম দেখুন।
           </p>
+        </div>
 
-          <p className="mt-4 text-sm text-gray-500">
+        {/* Product count and sorting */}
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-gray-500">
             মোট পণ্য:{" "}
             <span className="font-bold text-green-600">
-              {categoryProduct.length}
+              {categoryProduct.length.toLocaleString("bn-BD")}
             </span>
           </p>
+
+          <div className="flex items-center gap-3">
+            <label
+              htmlFor="product-sort"
+              className="shrink-0 text-sm font-semibold text-gray-700"
+            >
+              সাজান:
+            </label>
+
+            <select
+              id="product-sort"
+              value={sort}
+              onChange={(e) =>
+                setSort(e.target.value as SortOption)
+              }
+              className="w-full rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 shadow-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100 sm:w-auto"
+            >
+              <option value="default">ডিফল্ট</option>
+              <option value="asc">দাম: কম থেকে বেশি</option>
+              <option value="desc">দাম: বেশি থেকে কম</option>
+            </select>
+          </div>
         </div>
 
         {/* Product Grid */}
-        {categoryProduct.length > 0 ? (
+        {sortedProducts.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {categoryProduct.map((product) => {
+            {sortedProducts.map((product) => {
               const change = Number(product.change?.pct ?? 0);
 
               return (
