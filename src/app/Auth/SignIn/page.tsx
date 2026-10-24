@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { signIn } from "@/lib/auth-client";
+import { authClient, signIn } from "@/app/lib/auth-client";
 import { toast } from "react-toastify";
 import { redirect } from "next/navigation";
 
@@ -33,6 +33,17 @@ export default function SignInPage() {
       toast.error("User already exists. Use another email.");
     }
   };
+
+  const googleSignIn = async () => {
+      const data = await authClient.signIn.social({
+        provider: "google",
+      });
+    };
+    const gitHubSignIn=async()=>{
+     const data = await authClient.signIn.social({
+        provider: "github"
+    })
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f0f5f0] px-4 py-10">
@@ -146,6 +157,7 @@ export default function SignInPage() {
         <div className="flex flex-col gap-5">
           {/* Google */}
           <button
+          onClick={googleSignIn}
             type="button"
             className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
           >
@@ -176,6 +188,7 @@ export default function SignInPage() {
 
           {/* GitHub */}
           <button
+          onClick={gitHubSignIn}
             type="button"
             className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-800 transition hover:bg-gray-100"
           >

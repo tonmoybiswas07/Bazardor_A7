@@ -9,7 +9,7 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 import { redirect } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
+import { authClient, signUp } from "@/app/lib/auth-client";
 import { toast } from "react-toastify";
 
 export default function SignUpPage() {
@@ -41,10 +41,9 @@ export default function SignUpPage() {
 
   const isPasswordValid = passwordRules.every((rule) => rule.valid);
 
- 
-const handleSignUp=async(e:React.SubmitEvent<HTMLElement>)=>{
-     e.preventDefault();
-      const formData = new FormData(e.target);
+  const handleSignUp = async (e: React.SubmitEvent<HTMLElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
     const user = Object.fromEntries(formData.entries()) as {
       name: string;
       email: string;
@@ -55,7 +54,6 @@ const handleSignUp=async(e:React.SubmitEvent<HTMLElement>)=>{
 
     const { data, error } = await signUp.email({
       ...user,
-      
     });
     if (data) {
       toast.success("sign up succesfull");
@@ -64,13 +62,18 @@ const handleSignUp=async(e:React.SubmitEvent<HTMLElement>)=>{
     if (error) {
       toast.error("User already exists. Use another email.");
     }
-    
+  };
 
-
-}
-
-
-
+  const googleSignUp = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+    });
+  };
+  const gitHubSignUp=async()=>{
+     const data = await authClient.signIn.social({
+        provider: "github"
+    })
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f0f5f0] px-4 py-10">
@@ -98,7 +101,7 @@ const handleSignUp=async(e:React.SubmitEvent<HTMLElement>)=>{
         </div>
 
         {/* Sign Up Form */}
-        <form onSubmit={handleSignUp} className="space-y-5" >
+        <form onSubmit={handleSignUp} className="space-y-5">
           {/* Name */}
           <div>
             <label
@@ -242,6 +245,7 @@ const handleSignUp=async(e:React.SubmitEvent<HTMLElement>)=>{
         <div className="flex flex-col gap-4">
           {/* Google Button */}
           <button
+            onClick={googleSignUp}
             type="button"
             className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
           >
@@ -272,6 +276,7 @@ const handleSignUp=async(e:React.SubmitEvent<HTMLElement>)=>{
 
           {/* GitHub Button */}
           <button
+          onClick={gitHubSignUp}
             type="button"
             className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-800 transition hover:bg-gray-100"
           >
