@@ -8,6 +8,9 @@ import {
   FaCheckCircle,
   FaTimesCircle,
 } from "react-icons/fa";
+import { redirect } from "next/navigation";
+import { signUp } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,16 +41,36 @@ export default function SignUpPage() {
 
   const isPasswordValid = passwordRules.every((rule) => rule.valid);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ 
+const handleSignUp=async(e:React.SubmitEvent<HTMLElement>)=>{
+     e.preventDefault();
+      const formData = new FormData(e.target);
+    const user = Object.fromEntries(formData.entries()) as {
+      name: string;
+      email: string;
+      password: string;
+      imageUrl: string;
+    };
+    console.log(user);
 
-    if (!isPasswordValid) {
-      return;
+    const { data, error } = await signUp.email({
+      ...user,
+      
+    });
+    if (data) {
+      toast.success("sign up succesfull");
+      redirect("/Auth/SignIn");
     }
+    if (error) {
+      toast.error("User already exists. Use another email.");
+    }
+    
 
-    // এখানে Firebase অথবা backend registration logic যোগ করবে।
-    alert("পাসওয়ার্ডের সব শর্ত পূরণ হয়েছে!");
-  };
+
+}
+
+
+
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f0f5f0] px-4 py-10">
@@ -75,7 +98,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Sign Up Form */}
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form onSubmit={handleSignUp} className="space-y-5" >
           {/* Name */}
           <div>
             <label

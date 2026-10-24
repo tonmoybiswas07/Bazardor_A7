@@ -1,12 +1,38 @@
-
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { signIn } from "@/lib/auth-client";
+import { toast } from "react-toastify";
+import { redirect } from "next/navigation";
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleSignIn = async (e: React.SubmitEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const user = Object.fromEntries(formData.entries()) as {
+      name: string;
+      email: string;
+      password: string;
+      imageUrl: string;
+    };
+
+    const { data, error } = await signIn.email({
+      ...user,
+      callbackURL: "/",
+    });
+    if (data) {
+      toast.success("sign in succesfull");
+      redirect("/");
+    }
+    if (error) {
+      toast.error("User already exists. Use another email.");
+    }
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f0f5f0] px-4 py-10">
@@ -32,10 +58,7 @@ export default function SignInPage() {
         {/* Sign In Form */}
         <form
           className="space-y-5"
-          onSubmit={(e) => {
-            e.preventDefault();
-            // এখানে Firebase অথবা backend login logic যোগ করবে।
-          }}
+          onSubmit={handleSignIn}
         >
           {/* Email */}
           <div>
@@ -96,11 +119,7 @@ export default function SignInPage() {
                 aria-pressed={showPassword}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-green-600"
               >
-                {showPassword ? (
-                  <FaEyeSlash size={19} />
-                ) : (
-                  <FaEye size={19} />
-                )}
+                {showPassword ? <FaEyeSlash size={19} /> : <FaEye size={19} />}
               </button>
             </div>
           </div>
@@ -118,9 +137,7 @@ export default function SignInPage() {
         <div className="my-6 flex items-center gap-4">
           <div className="h-px flex-1 bg-gray-200" />
 
-          <span className="text-xs text-gray-400">
-            অথবা লগইন করুন
-          </span>
+          <span className="text-xs text-gray-400">অথবা লগইন করুন</span>
 
           <div className="h-px flex-1 bg-gray-200" />
         </div>
@@ -132,11 +149,7 @@ export default function SignInPage() {
             type="button"
             className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
           >
-            <svg
-              viewBox="0 0 48 48"
-              className="h-5 w-5"
-              aria-hidden="true"
-            >
+            <svg viewBox="0 0 48 48" className="h-5 w-5" aria-hidden="true">
               <path
                 fill="#EA4335"
                 d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z"
@@ -158,7 +171,6 @@ export default function SignInPage() {
                 transform="translate(2 0) scale(.92)"
               />
             </svg>
-
             Google দিয়ে চালিয়ে যান
           </button>
 
@@ -180,7 +192,6 @@ export default function SignInPage() {
                 d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.866-.014-1.7-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64 1.378 1.028 2.688 1.028 2.688 0 3.847-2.339 4.695-4.566 4.944.359.31.678.921.678 1.856 0 1.34-.012 2.42-.012 2.75 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.523 2 12 2Z"
               />
             </svg>
-
             Continue with GitHub
           </button>
         </div>
